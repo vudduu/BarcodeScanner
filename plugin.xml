@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?><plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com.phonegap.plugins.barcodescanner"
-    version="0.6.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+           id="com.phonegap.plugins.barcodescanner"
+      version="0.6.0">
 
     <name>BarcodeScanner</name>
     <description>Scans Barcodes.</description>
@@ -11,8 +11,6 @@
     <js-module src="www/barcodescanner.js" name="barcodescanner">
         <clobbers target="barcodescanner" />
     </js-module>
-
-    <license>MIT</license>
 
     <!-- begin ios -->
     <platform name="ios">
