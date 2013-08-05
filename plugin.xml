@@ -17,14 +17,13 @@
 
     <!-- ios -->
     <platform name="ios">
-		<plugins-plist key="BarcodeScanner" string="CDVBarcodeScanner" />
-		
-        <!-- Cordova >= 2.3 -->
-        <config-file target="config.xml" parent="plugins">
-            <plugin name="BarcodeScanner" value="CDVBarcodeScanner"/>
+        <config-file target="config.xml" parent="/*">
+            <feature name="BarcodeScanner">
+                <param name="ios-package" value="CDVBarcodeScanner"/>
+            </feature>
         </config-file>
 
-		<resource-file src="src/ios/scannerOverlay.xib" />
+        <resource-file src="src/ios/scannerOverlay.xib" />
 
         <header-file src="src/ios/zxing-all-in-one.h" />
 
