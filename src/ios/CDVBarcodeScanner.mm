@@ -473,11 +473,14 @@ parentViewController:(UIViewController*)parentViewController
     size_t   bytesPerRow =            CVPixelBufferGetBytesPerRow(imageBuffer);
     size_t   width       =            CVPixelBufferGetWidth(imageBuffer);
     size_t   height      =            CVPixelBufferGetHeight(imageBuffer);
+	if(height < width) { // SWAP
+		size_t aux = width; width = height; height = aux;
+	}
     uint8_t* baseAddress = (uint8_t*) CVPixelBufferGetBaseAddress(imageBuffer);
-    
     // only going to get 90% of the min(width,height) of the captured image
-    size_t    greyWidth  = 9 * MIN(width, height) / 10;
-    uint8_t*  greyData   = (uint8_t*) malloc(greyWidth * greyWidth);
+    size_t    greyWidth  = 9 * width / 10;
+	size_t    greyHeight  = 9 * height / 10;
+    uint8_t*  greyData   = (uint8_t*) malloc(greyWidth * greyHeight);
     
     // remember this pointer so we can free it later
     *ptr = greyData;
@@ -488,10 +491,10 @@ parentViewController:(UIViewController*)parentViewController
     }
     
     size_t offsetX = (width  - greyWidth) / 2;
-    size_t offsetY = (height - greyWidth) / 2;
+    size_t offsetY = (height - greyHeight) / 2;
     
     // pixel-by-pixel ...
-    for (size_t i=0; i<greyWidth; i++) {
+    for (size_t i=0; i<greyHeight; i++) {
         for (size_t j=0; j<greyWidth; j++) {
             // i,j are the coordinates from the sample buffer
             // ni, nj are the coordinates in the LuminanceSource
@@ -499,7 +502,7 @@ parentViewController:(UIViewController*)parentViewController
             size_t ni = greyWidth-j;
             size_t nj = i;
             
-            size_t baseOffset = (j+offsetY)*bytesPerRow + (i + offsetX)*4;
+            size_t baseOffset = (j+offsetY)*bytesPerRow + (i+offsetX)*4;
             
             // convert from color to grayscale
             // http://en.wikipedia.org/wiki/Grayscale#Converting_color_to_grayscale
@@ -516,8 +519,8 @@ parentViewController:(UIViewController*)parentViewController
     using namespace zxing;
     
     Ref<LuminanceSource> luminanceSource (
-                                          new GreyscaleLuminanceSource(greyData, greyWidth, greyWidth, 0, 0, greyWidth, greyWidth)
-                                          );
+		new GreyscaleLuminanceSource(greyData, greyWidth, greyHeight, 0, 0, greyWidth, greyHeight)
+	);
     
     return luminanceSource;
 }
